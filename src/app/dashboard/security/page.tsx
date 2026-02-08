@@ -49,7 +49,7 @@ export default function SecurityPage() {
         <CardContent className="space-y-4">
           <ol className="list-decimal list-inside space-y-2 text-muted-foreground">
             <li>A <strong className="text-foreground">256-bit Master Vault Key</strong> is randomly generated to encrypt your vault data.</li>
-            <li>This Master Vault Key is then encrypted (or "wrapped") using <strong className="text-foreground">ML-KEM-768</strong>, a post-quantum cryptography algorithm standardized by NIST. This produces an encrypted vault key and a PQC private key.</li>
+            <li>This Master Vault Key is then encrypted (or &quot;wrapped&quot;) using <strong className="text-foreground">ML-KEM-768</strong>, a post-quantum cryptography algorithm standardized by NIST. This produces an encrypted vault key and a PQC private key.</li>
             <li>The <strong className="text-foreground">PQC private key</strong> itself is then encrypted with <strong className="text-foreground">AES-256-GCM</strong> using the key derived from your password and keyfile in Stage 1.</li>
           </ol>
           <p className="font-semibold text-primary pt-4 border-t border-border mt-4">Result: To compromise the vault, an attacker would need to break the Argon2id wall (with your password and keyfile) AND break the ML-KEM encapsulation with a quantum computer.</p>
