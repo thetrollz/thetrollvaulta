@@ -26,7 +26,6 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
-import { deriveKey, generateAndWrapVaultKey, encryptWithAES } from "@/lib/crypto";
 import { PqVault } from "@/lib/vault";
 
 export default function LoginPage() {
@@ -90,6 +89,7 @@ export default function LoginPage() {
     const salt = window.crypto.getRandomValues(new Uint8Array(32)); // Argon2 salt
 
     try {
+      const { deriveKey, generateAndWrapVaultKey, encryptWithAES } = await import('@/lib/crypto');
       // Stage 1: The Argon2id Wall
       const { key: argon2Key } = await deriveKey(passwordBytes, salt, keyfileBytes);
       
