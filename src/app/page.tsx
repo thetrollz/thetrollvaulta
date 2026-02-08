@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import Link from "next/link";
 import { useState } from "react";
@@ -26,10 +26,13 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
+import { deriveKey, generateAndWrapVaultKey, encryptWithAES } from "@/lib/crypto";
+import { PqVault } from "@/lib/vault";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [keyfileName, setKeyfileName] = useState<string | null>(null);
+  const [keyfile, setKeyfile] = useState<File | null>(null);
   const { toast } = useToast();
 
   const handleGenerateKeyfile = () => {
@@ -60,13 +63,86 @@ export default function LoginPage() {
   };
 
   const handleFactoryReset = () => {
-    // In a real app, this would trigger a full data wipe.
     console.log("Factory data reset initiated.");
     toast({
       title: "System Reset",
       description: "All vault data has been permanently erased.",
       variant: "destructive",
     });
+  };
+
+  const handleUnlockVault = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    const passwordInput = document.getElementById('passcode') as HTMLInputElement;
+    const password = passwordInput.value;
+
+    if (!password || !keyfile) {
+      toast({
+        title: "Missing Credentials",
+        description: "Please provide both a password and a keyfile.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const passwordBytes = new TextEncoder().encode(password);
+    const keyfileBytes = new Uint8Array(await keyfile.arrayBuffer());
+    const salt = window.crypto.getRandomValues(new Uint8Array(32)); // Argon2 salt
+
+    try {
+      // Stage 1: The Argon2id Wall
+      const { key: argon2Key } = await deriveKey(passwordBytes, salt, keyfileBytes);
+      
+      // Stage 2: Post-Quantum Hybrid Key Wrap
+      const { masterVaultKey, pqcPrivateKey, pqcWrappedKey } = await generateAndWrapVaultKey();
+
+      // Encrypt the PQC private key with the user-derived Argon2 key
+      const { iv: argon2Iv, ciphertext: pqcPrivateKeyEnc } = await encryptWithAES(
+        argon2Key,
+        pqcPrivateKey
+      );
+      
+      // Encrypt the main vault payload
+      const payload = new TextEncoder().encode("This is a top-secret message from the Troll Vault!");
+      const { iv: payloadIv, ciphertext: encryptedPayload } = await encryptWithAES(masterVaultKey, payload);
+
+      // Assemble the PqVault protobuf object
+      const vault = PqVault.create({
+        salt,
+        argon2Iv,
+        pqcWrappedKey,
+        pqcPrivateKeyEnc,
+        encryptedPayload,
+        payloadIv
+      });
+
+      // Serialize the vault to a binary format
+      const serializedVault = PqVault.encode(vault).finish();
+
+      // Trigger a download of the final encrypted vault file
+      const blob = new Blob([serializedVault], { type: "application/octet-stream" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "troll-vault.enc";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      toast({
+        title: "Vault Created Successfully!",
+        description: "Your encrypted vault 'troll-vault.enc' has been downloaded.",
+      });
+
+    } catch (error) {
+      console.error("Full encryption flow failed:", error);
+      toast({
+        title: "Critical Error",
+        description: "A failure occurred during the cryptographic process. Check the console.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -86,7 +162,7 @@ export default function LoginPage() {
         </p>
       </div>
 
-      <div className="w-full max-w-sm space-y-6">
+      <form className="w-full max-w-sm space-y-6">
         <div className="space-y-2">
           <Label
             htmlFor="passcode"
@@ -138,20 +214,26 @@ export default function LoginPage() {
               type="file"
               accept=".bin"
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-              onChange={(e) => setKeyfileName(e.target.files?.[0]?.name || null)}
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  setKeyfileName(file.name);
+                  setKeyfile(file);
+                }
+              }}
             />
           </div>
         </div>
-        
+
         <Button
           type="submit"
           className="w-full h-14 font-bold text-lg tracking-wider"
-          asChild
+          onClick={handleUnlockVault}
         >
-          <Link href="/dashboard">UNLOCK VAULT</Link>
+          UNLOCK VAULT
         </Button>
-      </div>
-      
+      </form>
+
       <div className="w-full max-w-sm space-y-4">
         <Button
           type="button"

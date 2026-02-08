@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+message PqVault {
+  bytes salt = 1;                // 32-byte Argon2 salt
+  bytes argon2_iv = 2;           // IV for the Argon2-wrapped PQC key
+  bytes pqc_wrapped_key = 3;     // The ML-KEM-768 encapsulated key
+  bytes pqc_private_key_enc = 4; // The ML-KEM private key, AES-encrypted by (Pass + Keyfile)
+  bytes encrypted_payload = 5;   // The actual vault data (AES-256-GCM)
+  bytes payload_iv = 6;          // IV for the main payload
+}
