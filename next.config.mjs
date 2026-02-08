@@ -15,6 +15,8 @@ const nextConfig = {
       type: 'asset/resource',
     });
 
+    config.resolve.fallback = { fs: false };
+
     // We don't need wasm on the server for a static export
     if (isServer) {
       config.resolve.alias['./argon2.wasm'] = path.resolve(
