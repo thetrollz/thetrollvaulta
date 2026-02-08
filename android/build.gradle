@@ -40,6 +40,11 @@ allprojects {
             force 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22'
         }
     }
+
+    // Set the Java version for all subprojects
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-source" << "17" << "-target" << "17"
+    }
 }
 
 task clean(type: Delete) {
