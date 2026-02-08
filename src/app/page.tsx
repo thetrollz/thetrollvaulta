@@ -12,6 +12,7 @@ import {
   EyeOff,
   FileKey,
   RefreshCw,
+  Bomb,
 } from "lucide-react";
 
 export default function LoginPage() {
@@ -20,7 +21,7 @@ export default function LoginPage() {
 
   return (
     <main
-      className="flex min-h-screen flex-col items-center justify-center p-4 space-y-8"
+      className="flex min-h-screen flex-col items-center justify-center p-4 space-y-8 pt-8 pb-8"
       suppressHydrationWarning
     >
       <div className="flex flex-col items-center text-center">
@@ -101,12 +102,20 @@ export default function LoginPage() {
         </Button>
       </div>
       
-      <div className="absolute bottom-8 text-center">
+      <div className="w-full max-w-sm space-y-4">
         <Button
-          variant="link"
-          className="h-auto p-0 text-muted-foreground hover:text-foreground text-sm font-semibold tracking-wider"
+          type="button"
+          variant="secondary"
+          className="w-full h-14 font-bold text-lg tracking-wider bg-input/50 hover:bg-input"
         >
-          <RefreshCw className="mr-2 h-4 w-4" />
+          <RefreshCw className="mr-2 h-5 w-5" />
+          GENERATE NEW KEYFILE
+        </Button>
+        <Button
+          variant="destructive"
+          className="w-full h-14 font-bold text-lg tracking-wider bg-destructive/20 text-destructive hover:bg-destructive/30"
+        >
+          <Bomb className="mr-2 h-5 w-5" />
           FACTORY DATA RESET
         </Button>
       </div>
