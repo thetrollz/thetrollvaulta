@@ -64,7 +64,7 @@ export async function generateAndWrapVaultKey(): Promise<{ masterVaultKey: Uint8
   if (typeof window === 'undefined') {
     throw new Error("generateAndWrapVaultKey can only be called in a browser environment.");
   }
-  const { Kyber } = await import('pqc-kyber');
+  const { default: Kyber } = await import('pqc-kyber');
   const kyber = new Kyber("Kyber768");
   const [pqcPublicKey, pqcPrivateKey] = await kyber.generateKeyPair();
   const { ciphertext: pqcWrappedKey, sharedSecret: masterVaultKey } = await kyber.encrypt(pqcPublicKey);
@@ -76,7 +76,7 @@ export async function unwrapVaultKey(pqcPrivateKey: Uint8Array, pqcWrappedKey: U
   if (typeof window === 'undefined') {
     throw new Error("unwrapVaultKey can only be called in a browser environment.");
   }
-  const { Kyber } = await import('pqc-kyber');
+  const { default: Kyber } = await import('pqc-kyber');
   const kyber = new Kyber("Kyber768");
   const masterVaultKey = await kyber.decrypt(pqcPrivateKey, pqcWrappedKey);
   return masterVaultKey;
