@@ -12,6 +12,7 @@ import {
   EyeOff,
   FileKey,
   RefreshCw,
+  Sparkles,
 } from "lucide-react";
 
 export default function LoginPage() {
@@ -35,7 +36,7 @@ export default function LoginPage() {
         </p>
       </div>
 
-      <div className="w-full max-w-sm space-y-8">
+      <div className="w-full max-w-sm space-y-6">
         <div className="space-y-2">
           <Label
             htmlFor="passcode"
@@ -66,20 +67,26 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <div className="space-y-2">
-          <Label className="font-code text-xs tracking-widest text-muted-foreground">
-            HARDWARE TOKEN REQUIRED
-          </Label>
-          <div className="relative flex flex-col items-center justify-center w-full h-32 rounded-lg border-2 border-dashed border-border/50 bg-input/50 hover:border-primary/50 hover:bg-primary/10 transition-colors cursor-pointer">
-            <FileKey className="h-8 w-8 text-muted-foreground" />
-            <span className="mt-2 text-sm font-code text-muted-foreground">
-              SELECT .BIN FILE
-            </span>
-            <Input
-              type="file"
-              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-            />
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <Label className="font-code text-xs tracking-widest text-muted-foreground">
+              HARDWARE TOKEN REQUIRED
+            </Label>
+            <div className="relative flex flex-col items-center justify-center w-full h-32 rounded-lg border-2 border-dashed border-border/50 bg-input/50 hover:border-primary/50 hover:bg-primary/10 transition-colors cursor-pointer">
+              <FileKey className="h-8 w-8 text-muted-foreground" />
+              <span className="mt-2 text-sm font-code text-muted-foreground">
+                SELECT .BIN FILE
+              </span>
+              <Input
+                type="file"
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              />
+            </div>
           </div>
+          <Button variant="outline" className="w-full h-12">
+            <Sparkles className="mr-2 h-4 w-4" />
+            Generate New Keyfile
+          </Button>
         </div>
 
         <Button
@@ -94,7 +101,7 @@ export default function LoginPage() {
       <div className="absolute bottom-8 text-center">
         <Button
           variant="link"
-          className="text-muted-foreground/50 hover:text-muted-foreground text-xs"
+          className="text-destructive/70 hover:text-destructive text-xs"
         >
           <RefreshCw className="mr-2 h-3 w-3" />
           FACTORY DATA RESET
