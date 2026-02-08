@@ -82,6 +82,18 @@ message PqVault {
         </CardContent>
       </Card>
 
+      <Card>
+        <CardHeader>
+          <CardTitle>Data Integrity: Atomic File Operations</CardTitle>
+          <CardDescription>
+            To prevent data corruption, vault updates are performed atomically, ensuring that a crash or interruption during a save operation doesn't result in a lost or damaged vault.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p>When the vault is saved, the new encrypted data is first written to a temporary file. Only after the write operation has completed successfully is the temporary file atomically renamed to become the new official vault file. If any error occurs during the process, the temporary file is discarded, and the original, untouched vault file remains, guaranteeing data integrity.</p>
+        </CardContent>
+      </Card>
+
     </div>
   );
 }
