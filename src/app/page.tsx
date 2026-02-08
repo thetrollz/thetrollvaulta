@@ -39,35 +39,35 @@ export default function LoginPage() {
     try {
       const randomBytes = new Uint8Array(64);
       window.crypto.getRandomValues(randomBytes);
-      const blob = new Blob([randomBytes], { type: "application/octet-stream" });
+      const blob = new Blob([randomBytes], { type: 'application/octet-stream' });
       const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
+      const a = document.createElement('a');
       a.href = url;
-      a.download = "troll-vault.bin";
+      a.download = 'troll-vault.bin';
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
       toast({
-        title: "Keyfile Generated",
-        description: "Your new keyfile 'troll-vault.bin' has been downloaded.",
+        title: 'Keyfile Generated',
+        description: 'Your new keyfile has been downloaded.',
       });
     } catch (error) {
-      console.error("Keyfile generation failed:", error);
+      console.error('Keyfile generation failed:', error);
       toast({
-        title: "Error",
-        description: "Could not generate a new keyfile. Please try again.",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Could not generate a new keyfile. Please try again.',
+        variant: 'destructive',
       });
     }
   };
 
   const handleFactoryReset = () => {
-    console.log("Factory data reset initiated.");
+    console.log('Factory data reset initiated.');
     toast({
-      title: "System Reset",
-      description: "All vault data has been permanently erased.",
-      variant: "destructive",
+      title: 'System Reset',
+      description: 'All vault data has been permanently erased.',
+      variant: 'destructive',
     });
   };
 
@@ -78,9 +78,9 @@ export default function LoginPage() {
 
     if (!password || !keyfile) {
       toast({
-        title: "Missing Credentials",
-        description: "Please provide both a password and a keyfile.",
-        variant: "destructive",
+        title: 'Missing Credentials',
+        description: 'Please provide both a password and a keyfile.',
+        variant: 'destructive',
       });
       return;
     }
@@ -103,7 +103,7 @@ export default function LoginPage() {
       );
       
       // Encrypt the main vault payload
-      const payload = new TextEncoder().encode("This is a top-secret message from the Troll Vault!");
+      const payload = new TextEncoder().encode('This is a top-secret message from the Troll Vault!');
       const { iv: payloadIv, ciphertext: encryptedPayload } = await encryptWithAES(masterVaultKey, payload);
 
       // Assemble the PqVault protobuf object
@@ -120,27 +120,27 @@ export default function LoginPage() {
       const serializedVault = PqVault.encode(vault).finish();
 
       // Trigger a download of the final encrypted vault file
-      const blob = new Blob([serializedVault], { type: "application/octet-stream" });
+      const blob = new Blob([serializedVault], { type: 'application/octet-stream' });
       const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
+      const a = document.createElement('a');
       a.href = url;
-      a.download = "troll-vault.enc";
+      a.download = 'troll-vault.enc';
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
 
       toast({
-        title: "Vault Created Successfully!",
-        description: "Your encrypted vault 'troll-vault.enc' has been downloaded.",
+        title: 'Vault Created Successfully!',
+        description: 'Your encrypted vault has been downloaded.',
       });
 
     } catch (error) {
-      console.error("Full encryption flow failed:", error);
+      console.error('Full encryption flow failed:', error);
       toast({
-        title: "Critical Error",
-        description: "A failure occurred during the cryptographic process. Check the console.",
-        variant: "destructive",
+        title: 'Critical Error',
+        description: 'A failure occurred during the cryptographic process. Check the console.',
+        variant: 'destructive',
       });
     }
   };
@@ -174,7 +174,7 @@ export default function LoginPage() {
             <Lock className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-primary" />
             <Input
               id="passcode"
-              type={showPassword ? "text" : "password"}
+              type={showPassword ? 'text' : 'password'}
               placeholder="••••••••••"
               required
               className="pl-12 h-14 pr-12 text-lg font-code bg-input border-0"
@@ -205,7 +205,7 @@ export default function LoginPage() {
               <div className="w-full h-32 flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-muted-foreground/30 text-muted-foreground hover:bg-input/80 hover:text-foreground transition-colors">
                 <FileKey className="h-8 w-8" />
                 <span className="mt-2 text-sm font-semibold">
-                  {keyfileName || "SELECT .BIN FILE"}
+                  {keyfileName || 'SELECT .BIN FILE'}
                 </span>
               </div>
             </label>
@@ -264,7 +264,7 @@ export default function LoginPage() {
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
               <AlertDialogAction
-                className={buttonVariants({ variant: "destructive" })}
+                className={buttonVariants({ variant: 'destructive' })}
                 onClick={handleFactoryReset}
               >
                 Confirm Reset
