@@ -23,29 +23,29 @@
     --border: 0 0% 89.8%;
     --input: 0 0% 89.8%;
     --ring: 222.2 84% 4.9%;
-    --radius: 0.5rem;
+    --radius: 1rem;
   }
  
   .dark {
     --background: 0 0% 2%;
-    --foreground: 120 70% 75%;
-    --card: 0 0% 5%;
-    --card-foreground: 120 70% 75%;
+    --foreground: 0 0% 95%;
+    --card: 0 0% 8%;
+    --card-foreground: 0 0% 95%;
     --popover: 0 0% 2%;
-    --popover-foreground: 120 70% 75%;
-    --primary: 120 100% 50%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 100 80% 50%;
     --primary-foreground: 0 0% 5%;
     --secondary: 0 0% 10%;
-    --secondary-foreground: 120 70% 75%;
+    --secondary-foreground: 0 0% 95%;
     --muted: 0 0% 10%;
-    --muted-foreground: 120 50% 50%;
-    --accent: 120 100% 50%;
+    --muted-foreground: 0 0% 60%;
+    --accent: 100 80% 50%;
     --accent-foreground: 0 0% 5%;
-    --destructive: 0 72% 51%;
+    --destructive: 0 70% 50%;
     --destructive-foreground: 0 0% 98%;
-    --border: 120 100% 15%;
-    --input: 120 100% 10%;
-    --ring: 120 100% 60%;
+    --border: 0 0% 15%;
+    --input: 0 0% 12%;
+    --ring: 100 80% 55%;
   }
 }
  
@@ -55,54 +55,5 @@
   }
   body {
     @apply bg-background text-foreground;
-  }
-  .crt::before {
-    content: " ";
-    display: block;
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-    z-index: 100;
-    background-size: 100% 3px, 3px 100%;
-    pointer-events: none;
-    animation: flicker 0.15s infinite;
-  }
-
-  .crt::after {
-    content: " ";
-    display: block;
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    background: hsla(120, 100%, 50%, 0.1);
-    opacity: 0;
-    z-index: 100;
-    pointer-events: none;
-    animation: scanline 7s linear infinite;
-  }
-
-  @keyframes flicker {
-    0% { opacity: 0.2; }
-    2% { opacity: 0.8; }
-    4% { opacity: 0.2; }
-    8% { opacity: 1; }
-    10% { opacity: 0.4; }
-    100% { opacity: 0.4; }
-  }
-
-  @keyframes scanline {
-    0% {
-      transform: translateY(-10%);
-      opacity: 0.1;
-    }
-    100% {
-      transform: translateY(110%);
-      opacity: 0.1;
-    }
   }
 }

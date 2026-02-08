@@ -48,6 +48,9 @@ export default function DashboardLayout({
   const pathname = usePathname();
 
   const getPageTitle = () => {
+    if (pathname === '/dashboard') {
+      return '';
+    }
     const currentItem = navItems.find((item) => item.href === pathname);
     return currentItem ? currentItem.label : "Dashboard";
   };
@@ -159,9 +162,9 @@ export default function DashboardLayout({
                   </nav>
                 </SheetContent>
               </Sheet>
-              <h1 className="font-headline text-2xl font-semibold text-primary">
+              {!!getPageTitle() && <h1 className="font-headline text-2xl font-semibold text-primary">
                 {getPageTitle()}
-              </h1>
+              </h1>}
             </div>
 
             <DropdownMenu>
@@ -186,7 +189,7 @@ export default function DashboardLayout({
               </DropdownMenuContent>
             </DropdownMenu>
           </header>
-          <main className="flex-1 p-4 sm:px-6 sm:py-0 md:gap-8 crt">
+          <main className="flex-1 p-4 sm:px-6 sm:py-0 md:gap-8">
             {children}
           </main>
         </div>

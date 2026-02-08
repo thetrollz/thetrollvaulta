@@ -14,7 +14,7 @@ import { TrollVaultLogo } from "@/components/troll-vault-logo";
 
 export default function LoginPage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-4 crt">
+    <main className="flex min-h-screen flex-col items-center justify-center p-4">
       <div className="w-full max-w-md">
         <Card className="border-primary/50 bg-card/80 backdrop-blur-sm">
           <CardHeader className="items-center text-center">
