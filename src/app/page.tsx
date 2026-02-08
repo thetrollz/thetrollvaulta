@@ -83,7 +83,7 @@ export default function LoginPage() {
               />
             </div>
           </div>
-          <Button variant="outline" className="w-full h-12">
+          <Button variant="outline" className="w-full h-14 font-bold text-lg tracking-wider">
             <Sparkles className="mr-2 h-4 w-4" />
             Generate New Keyfile
           </Button>
@@ -98,12 +98,12 @@ export default function LoginPage() {
         </Button>
       </div>
 
-      <div className="absolute bottom-8 text-center">
+      <div className="absolute bottom-8 w-full max-w-sm px-4">
         <Button
-          variant="link"
-          className="text-destructive/70 hover:text-destructive text-xs"
+          variant="outline"
+          className="w-full h-14 font-bold text-lg tracking-wider border-destructive text-destructive hover:bg-destructive/10 hover:text-destructive"
         >
-          <RefreshCw className="mr-2 h-3 w-3" />
+          <RefreshCw className="mr-2 h-4 w-4" />
           FACTORY DATA RESET
         </Button>
       </div>
