@@ -12,7 +12,7 @@ const nextConfig = {
 
     config.module.rules.push({
       test: /\.wasm$/,
-      type: 'webassembly/async',
+      type: 'asset/resource',
     });
 
     // We don't need wasm on the server for a static export
