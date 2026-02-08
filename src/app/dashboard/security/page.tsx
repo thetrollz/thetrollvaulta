@@ -13,15 +13,15 @@ export default function SecurityPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Stage 1: The Argon2id Wall</CardTitle>
+          <CardTitle>Stage 1: The Argon2id Wall & Keyfile</CardTitle>
           <CardDescription>
-            Your master password is never stored directly. Instead, it's processed by a formidable key derivation function, Argon2id, to create a unique encryption key.
+            Your master password is combined with a high-entropy keyfile, and then processed by Argon2id to create the master encryption key.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <p>Argon2id is an ASIC-resistant algorithm designed to be memory-hard, making brute-force attacks extremely expensive for attackers. We use a high-cost configuration to maximize security against supercomputers.</p>
+          <p>Your master password alone is never used directly. It is first concatenated with a local, 64-byte high-entropy keyfile. This combined input is then fed into Argon2id, a formidable key derivation function designed to be memory-hard, making brute-force attacks extremely expensive. We use a high-cost configuration to maximize security.</p>
           <div className="flex flex-wrap gap-2">
-            <Badge variant="secondary" className="font-code text-sm">Iterations (t_cost): 4</Badge>
+            <Badge variant="secondary" className="font-code text-sm">Iterations (t_cost): 3</Badge>
             <Badge variant="secondary" className="font-code text-sm">Memory (m_cost): 1 GB</Badge>
             <Badge variant="secondary" className="font-code text-sm">Parallelism: 4 Threads</Badge>
           </div>
@@ -39,9 +39,34 @@ export default function SecurityPage() {
           <ol className="list-decimal list-inside space-y-2 text-muted-foreground">
             <li>A <strong className="text-foreground">256-bit Master Vault Key</strong> is randomly generated to encrypt your vault data.</li>
             <li>This Master Vault Key is then encrypted (or "wrapped") using <strong className="text-foreground">ML-KEM-768</strong>, a post-quantum cryptography algorithm standardized by NIST. This produces an encrypted vault key and a PQC private key.</li>
-            <li>The <strong className="text-foreground">PQC private key</strong> itself is then encrypted with <strong className="text-foreground">AES-256-GCM</strong> using the key derived from your password in Stage 1.</li>
+            <li>The <strong className="text-foreground">PQC private key</strong> itself is then encrypted with <strong className="text-foreground">AES-256-GCM</strong> using the key derived from your password and keyfile in Stage 1.</li>
           </ol>
-          <p className="font-semibold text-primary pt-4 border-t border-border mt-4">Result: To compromise the vault, an attacker would need to break the Argon2id wall with a supercomputer AND break the ML-KEM encapsulation with a quantum computer.</p>
+          <p className="font-semibold text-primary pt-4 border-t border-border mt-4">Result: To compromise the vault, an attacker would need to break the Argon2id wall (with your password and keyfile) AND break the ML-KEM encapsulation with a quantum computer.</p>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Vault Storage Format</CardTitle>
+          <CardDescription>
+            Your encrypted data is stored in a structured format using Protocol Buffers to ensure integrity and forward compatibility.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <pre className="p-4 rounded-lg bg-card-dark text-sm overflow-x-auto bg-secondary/30 font-code">
+            <code>
+{`syntax = "proto3";
+
+message PqVault {
+  bytes salt = 1;                // 32-byte Argon2 salt
+  bytes argon2_iv = 2;           // IV for the Argon2-wrapped PQC key
+  bytes pqc_wrapped_key = 3;     // The ML-KEM-768 encapsulated key
+  bytes pqc_private_key_enc = 4; // The ML-KEM private key, AES-encrypted by (Pass + Keyfile)
+  bytes encrypted_payload = 5;   // The actual vault data (AES-256-GCM)
+  bytes payload_iv = 6;          // IV for the main payload
+}`}
+            </code>
+          </pre>
         </CardContent>
       </Card>
       
