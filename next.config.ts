@@ -1,4 +1,4 @@
-import type {NextConfig} from 'next';
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   output: 'export',
@@ -30,6 +30,10 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
     ],
+  },
+  webpack(config) {
+    config.experiments = { ...config.experiments, asyncWebAssembly: true };
+    return config;
   },
 };
 
