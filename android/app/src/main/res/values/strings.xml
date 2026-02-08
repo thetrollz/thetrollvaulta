@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">TheTrollVault</string>
+    <string name="title_activity_main">TheTrollVault</string>
+    <string name="package_name">com.TheTrollVault.app</string>
+    <string name="custom_url_scheme">com.TheTrollVault.app</string>
+</resources>
