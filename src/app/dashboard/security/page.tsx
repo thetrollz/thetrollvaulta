@@ -1,13 +1,24 @@
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
+const vaultProto = `syntax = "proto3";
+
+message PqVault {
+  bytes salt = 1;                // 32-byte Argon2 salt
+  bytes argon2_iv = 2;           // IV for the Argon2-wrapped PQC key
+  bytes pqc_wrapped_key = 3;     // The ML-KEM-768 encapsulated key
+  bytes pqc_private_key_enc = 4; // The ML-KEM private key, AES-encrypted by (Pass + Keyfile)
+  bytes encrypted_payload = 5;   // The actual vault data (AES-256-GCM)
+  bytes payload_iv = 6;          // IV for the main payload
+}`;
+
 export default function SecurityPage() {
   return (
     <div className="space-y-8 max-w-4xl mx-auto">
       <div>
         <h1 className="font-headline text-3xl font-bold text-primary">Security Protocol</h1>
         <p className="text-muted-foreground mt-1">
-          The Troll Vault's defense-in-depth architecture.
+          The Troll Vault&apos;s defense-in-depth architecture.
         </p>
       </div>
 
@@ -55,16 +66,7 @@ export default function SecurityPage() {
         <CardContent>
           <pre className="p-4 rounded-lg bg-card-dark text-sm overflow-x-auto bg-secondary/30 font-code">
             <code>
-{`syntax = "proto3";
-
-message PqVault {
-  bytes salt = 1;                // 32-byte Argon2 salt
-  bytes argon2_iv = 2;           // IV for the Argon2-wrapped PQC key
-  bytes pqc_wrapped_key = 3;     // The ML-KEM-768 encapsulated key
-  bytes pqc_private_key_enc = 4; // The ML-KEM private key, AES-encrypted by (Pass + Keyfile)
-  bytes encrypted_payload = 5;   // The actual vault data (AES-256-GCM)
-  bytes payload_iv = 6;          // IV for the main payload
-}`}
+              {vaultProto}
             </code>
           </pre>
         </CardContent>
@@ -86,7 +88,7 @@ message PqVault {
         <CardHeader>
           <CardTitle>Data Integrity: Atomic File Operations</CardTitle>
           <CardDescription>
-            To prevent data corruption, vault updates are performed atomically, ensuring that a crash or interruption during a save operation doesn't result in a lost or damaged vault.
+            To prevent data corruption, vault updates are performed atomically, ensuring that a crash or interruption during a save operation doesn&apos;t result in a lost or damaged vault.
           </CardDescription>
         </CardHeader>
         <CardContent>
