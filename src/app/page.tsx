@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -14,10 +14,60 @@ import {
   RefreshCw,
   Bomb,
 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { useToast } from "@/hooks/use-toast";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [keyfileName, setKeyfileName] = useState<string | null>(null);
+  const { toast } = useToast();
+
+  const handleGenerateKeyfile = () => {
+    try {
+      const randomBytes = new Uint8Array(64);
+      window.crypto.getRandomValues(randomBytes);
+      const blob = new Blob([randomBytes], { type: "application/octet-stream" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "troll-vault.bin";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      toast({
+        title: "Keyfile Generated",
+        description: "Your new keyfile 'troll-vault.bin' has been downloaded.",
+      });
+    } catch (error) {
+      console.error("Keyfile generation failed:", error);
+      toast({
+        title: "Error",
+        description: "Could not generate a new keyfile. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleFactoryReset = () => {
+    // In a real app, this would trigger a full data wipe.
+    console.log("Factory data reset initiated.");
+    toast({
+      title: "System Reset",
+      description: "All vault data has been permanently erased.",
+      variant: "destructive",
+    });
+  };
 
   return (
     <main
@@ -106,17 +156,40 @@ export default function LoginPage() {
         <Button
           type="button"
           className="w-full h-14 font-bold text-lg tracking-wider"
+          onClick={handleGenerateKeyfile}
         >
           <RefreshCw className="mr-2 h-5 w-5" />
           GENERATE NEW KEYFILE
         </Button>
-        <Button
-          variant="destructive"
-          className="w-full h-14 font-bold text-lg tracking-wider bg-destructive/20 text-destructive hover:bg-destructive/30"
-        >
-          <Bomb className="mr-2 h-5 w-5" />
-          FACTORY DATA RESET
-        </Button>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button
+              variant="destructive"
+              className="w-full h-14 font-bold text-lg tracking-wider bg-destructive/20 text-destructive hover:bg-destructive/30"
+            >
+              <Bomb className="mr-2 h-5 w-5" />
+              FACTORY DATA RESET
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This action cannot be undone. This will permanently delete your
+                entire vault and all associated data. There is no recovery.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                className={buttonVariants({ variant: "destructive" })}
+                onClick={handleFactoryReset}
+              >
+                Confirm Reset
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </main>
   );
