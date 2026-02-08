@@ -8,6 +8,7 @@ import {
   Lock,
   PanelLeft,
   Settings,
+  Shield,
   ShieldAlert,
   Sparkles,
   User,
@@ -38,6 +39,7 @@ const navItems = [
   { href: "/dashboard/notes", label: "Secure Notes", icon: FileText },
   { href: "/dashboard/generator", label: "Generator", icon: Sparkles },
   { href: "/dashboard/monitoring", label: "Monitoring", icon: ShieldAlert },
+  { href: "/dashboard/security", label: "Security Protocol", icon: Shield },
 ];
 
 export default function DashboardLayout({
