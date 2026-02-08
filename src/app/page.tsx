@@ -105,8 +105,7 @@ export default function LoginPage() {
       <div className="w-full max-w-sm space-y-4">
         <Button
           type="button"
-          variant="secondary"
-          className="w-full h-14 font-bold text-lg tracking-wider bg-input/50 hover:bg-input"
+          className="w-full h-14 font-bold text-lg tracking-wider"
         >
           <RefreshCw className="mr-2 h-5 w-5" />
           GENERATE NEW KEYFILE
