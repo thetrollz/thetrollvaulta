@@ -10,6 +10,11 @@ const nextConfig = {
   webpack: (config, { isServer }) => {
     config.experiments = { ...config.experiments, asyncWebAssembly: true };
 
+    config.module.rules.push({
+      test: /\.wasm$/,
+      type: 'webassembly/async',
+    });
+
     // We don't need wasm on the server for a static export
     if (isServer) {
       config.resolve.alias['./argon2.wasm'] = path.resolve(
