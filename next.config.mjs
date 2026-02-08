@@ -1,15 +1,13 @@
+import path from 'path';
 
-/** @type {import('next').NextConfig} */
 const nextConfig = {
-  webpack(config, { isServer, dev }) {
-    config.experiments = { ...config.experiments, asyncWebAssembly: true };
-
-    config.output.webassemblyModuleFilename =
-      isServer && !dev
-        ? '../static/wasm/[modulehash].wasm'
-        : 'static/wasm/[modulehash].wasm';
-
-    config.module.parser.javascript.wasmEnabled = true;
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.resolve.alias['./argon2.wasm'] = path.resolve(
+        __dirname,
+        'src/lib/empty-module.ts'
+      );
+    }
 
     return config;
   },
